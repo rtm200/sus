@@ -172,7 +172,42 @@ main .container_left form h4 {
     font-weight: 500;
 }
 
+select {
+    /* Reset */
+    appearance: none;
+    border: 0;
+    outline: 0;
+
+    /* Personalize */
+    height: 56px;
+    border-radius: 7px;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    outline: none;
+    border: none;
+    background-color: white;
+    color: black;
+    cursor: pointer;
+    /* Remove IE arrow */
+    &::-ms-expand {
+      display: none;
+    }
+    /* Remove focus outline */
+    &:focus {
+      outline: none;
+    }
+}
+.drpArrow{
+    right: 5%;
+    top: 55%;
+    position: absolute;
+    color: #6C6C6C;
+    cursor: pointer;
+    font-size: 1.5rem;
+}
 main form .inputField {
+    position: relative;
     width: 100%;
     text-align: left;
     display: flex;
@@ -213,7 +248,7 @@ main form .password_input {
 
 .eye {
     position: absolute;
-    right: 10%;
+    right: 5%;
     top: 50%;
     transform: translateY(-50%);
     color: grey;
