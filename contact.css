@@ -509,7 +509,9 @@ footer p {
     header img {
         width: 136px;
     }
-
+header ul li a{
+        font-size: 14px;
+    }
     /* main */
     .form{
         padding: 24px 24px 32px 24px;
