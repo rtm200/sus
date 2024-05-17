@@ -1,0 +1,260 @@
+<?php 
+session_start();
+
+include("connection.php");
+include("functions.php");
+
+if($_SERVER['REQUEST_METHOD'] == "POST")
+{
+	$full_name = $_POST['full_name'];
+	$email = $_POST['email'];
+	$user_type = $_POST['user_type'];
+	$password = $_POST['password'];
+	$user_id = random_num(20);
+		
+
+	if(!empty($email) && !empty($password) && !is_numeric($email) && !is_numeric($full_name))
+	{
+		//users table
+		$checkEmail = $con->prepare('SELECT email FROM users WHERE email = ?;');
+		$checkEmail->bind_param("s", $email);
+		$checkEmail->execute();
+		$result = $checkEmail->get_result();
+
+		// check if email is Already Taken
+		if ($result->num_rows > 0) {
+   			$checkEmail = null;
+    		header("Location: signup.php?error=emailExists");
+    		exit();
+		}
+
+		//users_temp table
+		$checkEmail = null;
+		$result = null;
+		$checkEmail = $con->prepare('SELECT email FROM users_temp WHERE email = ?;');
+		$checkEmail->bind_param("s", $email);
+		$checkEmail->execute();
+		$result = $checkEmail->get_result();
+
+		// check if email is Already Taken
+		if ($result->num_rows > 0) {
+   			$checkEmail = null;
+    		header("Location: signup.php?error=emailExists");
+    		exit();
+		}
+		else{
+			//prepared statement for security (sql injection)
+			$stmt = $con->prepare('INSERT INTO users_temp (`user_id`, `email`, `password`, `full_name`, `user_type`) VALUES (?,?,?,?,?);');
+			$stmt->bind_param("sssss", $user_id, $email, $password, $full_name, $user_type);
+			$stmt->execute();
+
+			header("Location: index.php");
+			$stmt = null;
+		}	
+			
+	}
+	else
+	{
+		echo "Please enter some valid information!";
+	}
+}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Pofoo</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<img src="img/1.png" class="tree">
+	<header>
+	<!-- mobile menu opacity plane -->
+	<span id="opacity_modal" onclick="toggleMenu()"></span>
+	
+	<i class='bx bx-menu burger' onclick="toggleMenu()"></i>
+		<img src="img/logo.png">
+		<ul id="ul">
+			<img src="img/1.png" class="mobile_tree">
+			<li><i class='bx bx-x closeBurger' onclick="toggleMenu()"></i><a href="index.php">Home</a></li>
+			<li><a href="#">About</a></li>
+			<li><a href="contact.php">Contact us</a></li>
+			<li><a href="#" id="active">Join Now</a></li>
+			<img src="img/connection.jpg" class="connection_tree">
+		</ul>
+		<a href="#" class="donate">Donate</a>
+	</header>
+	<main>
+		<h1>Welcome to your autism support network!</h1>
+		<div class="container">
+			<div class="container_left">
+				<form action="" method="POST">
+					<h4>Sign In</h4>
+					<div class="inputField">
+						<h6>Full Name</h6>
+						<input id="text" type="text" name="full_name" autocomplete="off" placeholder="You Name" required>
+					</div>
+					<div class="inputField">
+						<h6>Email</h6>
+						<input type="text" name="email" placeholder="example@gmail.com" autocomplete="off">
+					</div>
+					<div class="inputField">
+					<h6>User Type</h6>
+					<i class='bx bx-chevron-down drpArrow'></i>
+					<select id="user_type" name="user_type" autocomplete="off" required>
+						<option value="parents">Parents</option>
+						<option value="board_certified_behaviour_analyst">Board Certified Behaviour Analyst</option>
+						<option value="behaviour_consultant">Behaviour Consultant</option>
+						<option value="behaviour_interventionist">Behaviour Interventionist</option>
+						<option value="slp">SLP</option>
+						<option value="occupational_therapist">Occupational Therapist</option>
+						<option value="psychologist">Psychologist</option>
+						<option value="psychiatrist">Psychiatrist</option>
+						<option value="paediatrician">Paediatrician</option>
+					</select>
+					</div>
+					<div class="inputField">
+						<h6>Password</h6>
+						<span class="password_input">
+							<i class='bx bxs-show eye' id="showPwd"></i>
+							<i class='bx bxs-hide eye' id="hidePwd"></i>
+							<input type="password" name="password" placeholder="Password" autocomplete="off" id="passwordField">
+						</span>
+					</div>
+					<!-- error handler -->
+					<?php
+						if (isset($_GET['error']) && $_GET['error'] === 'WrongUsernameOrPassword') {
+							echo '<p class="error-wrong">Wrong username or password. Please try again.</p>';
+						}
+					?>
+					<?php 
+						if (isset($_GET['error']) && $_GET['error'] === 'empty') {
+							echo '<p class="error-empty">inputs cant be empty!.</p>';
+						}
+					?>
+					<!-- end of error handler -->
+					<button name="submit" type="submit">Register</button>
+					<div class="signup">
+						<h5>Already a member?</h5>
+						<a href="index.php">Login</a>
+					</div>
+				</form>
+			</div>
+			<div class="container_right">
+				<img src="img/connection.jpg">
+			</div>
+		</div>
+
+		<section>
+			<h2>Who is Poofo for?</h2>
+			<div class="cards">
+				<div class="cards_left">
+					<div class="card">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60" fill="none">
+							<path d="M40.6539 23.7031C35.993 14.3735 20.2892 16.427 18.0459 26.6753C16.6923 32.8597 22.3993 37.1874 23.1366 42.9793H36.2194C36.6041 41.4308 37.3864 39.5889 37.9287 38.4567C39.0552 36.1053 40.6488 34.5677 41.2535 31.9442C41.8293 29.4481 41.7624 25.9226 40.6539 23.7031Z" fill="#FFC700" stroke="black" stroke-width="3" stroke-miterlimit="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+							<path d="M22.8967 50.8717C22.8928 49.0845 22.8053 47.298 22.8362 45.5115C22.8484 44.8038 22.7275 43.9385 23.3399 43.4438C24.2341 42.722 25.5639 42.6171 26.673 42.5901C28.7529 42.5405 30.8483 42.5579 32.9301 42.5624C33.8784 42.5637 35.293 42.399 36.1474 42.8706C36.9606 43.3177 37.1664 44.5381 37.2584 45.3622C37.4334 46.9409 37.9005 50.4671 36.5598 51.6894C35.7151 52.4595 34.3982 52.6203 33.3174 52.7535C30.4487 53.1066 22.9005 53.0365 22.8967 50.8717Z" fill="#DADADA" stroke="black" stroke-width="3" stroke-miterlimit="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+							<path d="M30.5408 52.9066C30.564 53.8793 30.5756 54.8571 30.499 55.8273" stroke="black" stroke-width="3" stroke-miterlimit="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+							<path d="M9.5 37.4964C10.521 36.9579 11.5863 36.5147 12.6176 36" stroke="black" stroke-width="3" stroke-miterlimit="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+							<path d="M9.5 18C10.6393 18.7237 11.7291 19.5228 12.8711 20.2401" stroke="black" stroke-width="3" stroke-miterlimit="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+							<path d="M30.5255 11.2872C30.4856 9.85447 30.494 8.43206 30.5403 7" stroke="black" stroke-width="3" stroke-miterlimit="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+							<path d="M46.5 19.7445C47.9301 18.7981 48.9027 18.4084 50.3573 17.5" stroke="black" stroke-width="3" stroke-miterlimit="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+							<path d="M46.5 37C47.6027 37.9882 48.4522 38.6412 49.5195 39.6674" stroke="black" stroke-width="3" stroke-miterlimit="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+						</svg>
+						<p>Professionals and families require a unified platform to gather and oversee session data and compile program data sheets, reports, and related documents.</p>
+					</div>
+					<div class="card">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60" fill="none">
+							<path d="M19.5126 8.13571C26.33 2.80119 36.4567 3.79578 42.1933 9.62567C48.1023 15.6312 48.709 27.3064 41.5113 33.0301C37.3509 36.3394 30.2948 38.2399 25.0195 36.6894C15.1849 33.7989 10.0543 21.7905 15.5561 12.4165" fill="#F4FFFE"/>
+							<path d="M19.5126 8.13571C26.33 2.80119 36.4567 3.79578 42.1933 9.62567C48.1023 15.6312 48.709 27.3064 41.5113 33.0301C37.3509 36.3394 30.2948 38.2399 25.0195 36.6894C15.1849 33.7989 10.0543 21.7905 15.5561 12.4165" stroke="#6C4C9E" stroke-width="3.86817" stroke-miterlimit="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+							<path fill-rule="evenodd" clip-rule="evenodd" d="M22.268 35.5919C23.8982 36.4713 25.7683 36.903 26.6156 37.0464C25.8063 40.3146 24.3581 44.2595 23.0818 47.3642C22.284 49.3032 21.2972 51.0743 20.4074 52.9722C19.7036 54.4737 17.598 56.4024 16.1923 54.4132C15.1167 52.8917 16.0456 50.5725 16.5738 49.0182C18.0322 44.724 20.5747 39.7774 22.268 35.5919Z" fill="#6C4C9E" stroke="#6C4C9E" stroke-width="3.86817" stroke-miterlimit="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+							<path d="M28.8152 12.3476C27.7667 12.3456 26.7306 12.5738 25.7799 13.016C24.7081 13.5159 23.776 14.2911 23.2285 15.3192" stroke="#6C4C9E" stroke-width="3.86817" stroke-miterlimit="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+						</svg>
+						<p>Families seeking to connect with/hire Behavioral Interventionists (BI), Board-Certified Behavior Analysts (BCBAs), Speech-Language Pathologists (SLPs), Occupational therapists (OT), and therapists within their local area.</p>
+					</div>
+				</div>
+				<div class="cards_right">
+					<div class="card">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60" fill="none">
+							<g clip-path="url(#clip0_35_139)">
+							<path d="M9.25219 27.4931C10.1619 27.477 12.7712 27.4416 13.679 27.4931C14.9257 24.9288 16.8918 22.9486 19.4844 21.7365C21.0689 20.9961 23.0099 20.7806 24.3184 19.5318C24.8241 19.0506 25.1966 18.4073 25.5182 17.7286C26.6878 15.2627 27.2983 12.672 28.1945 10.1077C28.6384 8.83514 29.1981 7.27699 30.3831 6.49341C32.8027 4.89344 35.0093 7.50987 35.5201 9.70042C36.4916 13.8692 35.2969 18.343 33.365 22.0685C37.5479 21.6606 41.8608 21.6002 45.9647 22.6282C47.9114 23.1146 49.9803 24.225 50.1399 26.4644C50.2525 28.0393 49.5416 29.7132 48.3791 30.7747C47.9989 31.1221 46.7527 31.9385 46.7592 31.943C46.7971 31.972 47.4585 34.1259 47.6084 34.9796C48.0574 37.5465 46.3217 39.4823 43.9143 40.0658C45.7942 42.257 44.3615 46.6503 41.0496 47.091C41.193 52.0298 35.4166 52.2839 31.9619 52.587C22.6284 53.4053 19.6607 52.7079 13.4094 51.1652C12.7165 50.9947 9.7141 50.7959 9 50.794" fill="#FFE6C1"/>
+							<path d="M9.25219 27.4931C10.1619 27.477 12.7712 27.4416 13.679 27.4931C14.9257 24.9288 16.8918 22.9486 19.4844 21.7365C21.0689 20.9961 23.0099 20.7806 24.3184 19.5318C24.8241 19.0506 25.1966 18.4073 25.5182 17.7286C26.6878 15.2627 27.2983 12.672 28.1945 10.1077C28.6384 8.83514 29.1981 7.27699 30.3831 6.49341C32.8027 4.89344 35.0093 7.50987 35.5201 9.70042C36.4916 13.8692 35.2969 18.343 33.365 22.0685C37.5479 21.6606 41.8608 21.6002 45.9647 22.6282C47.9114 23.1146 49.9803 24.225 50.1399 26.4644C50.2525 28.0393 49.5416 29.7132 48.3791 30.7747C47.9989 31.1221 46.7527 31.9385 46.7592 31.943C46.7971 31.972 47.4585 34.1259 47.6084 34.9796C48.0574 37.5465 46.3217 39.4823 43.9143 40.0658C45.7942 42.257 44.3615 46.6503 41.0496 47.091C41.193 52.0298 35.4166 52.2839 31.9619 52.587C22.6284 53.4053 19.6607 52.7079 13.4094 51.1652C12.7165 50.9947 9.7141 50.7959 9 50.794" stroke="black" stroke-width="3.86817" stroke-miterlimit="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+							<path d="M0.286952 23.2712C2.21567 23.2551 5.48444 22.402 7.09406 23.807C8.09573 24.682 7.44596 27.8163 7.42602 29.0476C7.34753 34.0058 7.3604 38.9646 7.35976 43.9234C7.35976 45.9918 8.28294 50.0357 6.63408 51.6737C5.10101 53.1958 1.9519 52.7706 2.14577e-05 52.8291" fill="#A1F798"/>
+							<path d="M0.286952 23.2712C2.21567 23.2551 5.48444 22.402 7.09406 23.807C8.09573 24.682 7.44596 27.8163 7.42602 29.0476C7.34753 34.0058 7.3604 38.9646 7.35976 43.9234C7.35976 45.9918 8.28294 50.0357 6.63408 51.6737C5.10101 53.1958 1.9519 52.7706 2.14992e-05 52.8291" stroke="black" stroke-width="3.86817" stroke-miterlimit="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+							</g>
+							<defs>
+							<clipPath id="clip0_35_139">
+							<rect width="60" height="60" fill="white" transform="matrix(-1 0 0 1 60 0)"/>
+							</clipPath>
+							</defs>
+						</svg>
+						<p>Families or professionals desiring access to a comprehensive array of autism research integrating professional insight with personal experiences, fostering a more holistic and insightful comprehension of the latest advancements in this domain.</p>
+					</div>
+					<div class="card">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60" fill="none">
+							<path d="M9.25608 26.8658C9.6112 21.0951 16.9825 6.99001 33.6925 7.44035C37.7795 7.55036 38.0369 14.6463 39.5436 18.424C47.1381 17.8939 50.9126 23.0148 50.5233 28.5082C49.7192 39.836 37.4225 49.9795 26.8229 49.4719C22.5255 49.266 17.0468 48.0096 15.9474 41.5331C15.1432 36.8008 17.1504 35.868 17.611 34.2957C14.9927 31.6676 12.0417 29.3227 9.25608 26.8658Z" fill="#EDBABF" stroke="black" stroke-width="3.86817" stroke-miterlimit="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+							<path d="M39.3718 18.0682C40.4093 20.5078 41.3133 23.0021 42.0796 25.5399" stroke="black" stroke-width="3.86817" stroke-miterlimit="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+							<path d="M17.5781 34.2976C19.6169 35.9008 21.8518 37.2608 23.8912 38.8691" stroke="black" stroke-width="3.86817" stroke-miterlimit="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+							<path d="M48.996 52.2749C46.5063 49.6346 44.5152 46.3942 42.2526 43.5416" stroke="black" stroke-width="3.86817" stroke-miterlimit="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+							<path d="M34.5705 8.74567C34.8394 11.0186 33.9619 13.24 32.9403 15.2176C30.3457 20.2382 25.053 25.0317 19.2965 25.9954" stroke="black" stroke-width="3.86817" stroke-miterlimit="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+						</svg>
+						<p>Professionals and therapists aiming to expand their client base can benefit from targeted marketing strategies that resonate with their desired audience.</p>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+	<footer>
+		<div class="footer_flex">
+			<img src="img/logo.png">
+			<ul class="ul2">
+				<li><a href="index.php" id="active">Home</a></li>
+				<li><a href="#">About Us</a></li>
+				<li><a href="contact.php">Contact Us</a></li>
+			</ul> 
+			<ul class="ul1">
+				<li><a href="#"><i class='bx bxl-twitter' style="color:white; background:#00acee; border-radius:6px; padding:5px;"></i></a></li>
+				<li><a href="#"><i class='bx bxl-linkedin-square' style="color:white; background:#0a66c2; border-radius:6px; padding:5px;"></i></a></li>
+				<li><a href="#"><i class='bx bxl-facebook-square' style="color:white; background:#3b5998; border-radius:6px; padding:5px;"></i></a></li>
+				<li><a href="#"><i class='bx bxl-instagram-alt' style="color:white; background:#ee2a7b; border-radius:6px; padding:5px;"></i></a></li>
+			</ul>
+		</div>
+		<p>Copyright © 2024 Poofo - All rights reserved.</p>
+	</footer>
+</body>
+<script>
+	function toggleMenu() {
+  		var menuItems = document.getElementById("ul");
+  		menuItems.classList.toggle("show");
+		
+		var menuItems = document.getElementById("opacity_modal");
+  		menuItems.classList.toggle("show");
+	}
+	// show password
+	document.getElementById("showPwd").addEventListener("click", function() {
+		var passwordField = document.getElementById("passwordField");
+		var showPwdIcon = document.getElementById("showPwd");
+		var hidePwdIcon = document.getElementById("hidePwd");
+
+		passwordField.type = "password";
+		showPwdIcon.style.display = "none";
+		hidePwdIcon.style.display = "block";
+	});
+
+	document.getElementById("hidePwd").addEventListener("click", function() {
+		var passwordField = document.getElementById("passwordField");
+		var showPwdIcon = document.getElementById("showPwd");
+		var hidePwdIcon = document.getElementById("hidePwd");
+
+		passwordField.type = "text";
+		showPwdIcon.style.display = "block";
+		hidePwdIcon.style.display = "none";
+	});
+
+	// check empty input
+	
+</script>
+</html>
