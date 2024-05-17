@@ -597,6 +597,9 @@ footer p {
     header img {
         width: 136px;
     }
+    header ul{
+        gap: 28px;
+    }
 header ul li a{
         font-size: 14px;
     }
