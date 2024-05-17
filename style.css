@@ -597,7 +597,9 @@ footer p {
     header img {
         width: 136px;
     }
-
+header ul li a{
+        font-size: 14px;
+    }
     /* main */
     main h1 {
         width: 100%;
