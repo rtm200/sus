@@ -1,0 +1,118 @@
+<?php 
+session_start();
+
+include("connection.php");
+
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Pofoo</title>
+	<link rel="stylesheet" href="contact.css">
+</head>
+<body>
+<img src="img/1.png" class="tree">
+	<header>
+	<!-- mobile menu opacity plane -->
+	<span id="opacity_modal" onclick="toggleMenu()"></span>
+	
+	<i class='bx bx-menu burger' onclick="toggleMenu()"></i>
+		<img src="img/logo.png">
+		<ul id="ul">
+			<img src="img/1.png" class="mobile_tree">
+			<li><i class='bx bx-x closeBurger' onclick="toggleMenu()"></i><a href="#">Home</a></li>
+			<li><a href="#">About</a></li>
+			<li><a href="contact.php" id="active">Contact us</a></li>
+			<li><a href="#">Join Now</a></li>
+			<img src="img/connection.jpg" class="connection_tree">
+		</ul>
+		<a href="#" class="donate">Donate</a>
+	</header>
+	<main>
+        <div class="form">
+            <div class="form_left">
+
+                <form action="" method="POST">
+                    <h2>Contact</h2>
+                    <h6>Reach out and we will get in touch with you within 24 hours.</h6>
+                    <span class="inputField">
+                        <p>Fullname</p>
+                        <input type="text" name="fullname" placeholder="Your full name">
+                    </span>
+                    <span class="inputField">
+                        <p>Email</p>
+                        <input type="email" name="email" placeholder="Youremail@email.com">
+                    </span>
+                    <span class="country_list">
+                        <p>Country</p>
+                        <ul>
+                            <li>Australia</li>
+                            <li>Canada</li>
+                            <li>USA</li>
+                            <li>Europe</li>
+                        </ul>
+                    </span>
+                    <span>
+                        <p>Message</p>
+                        <textarea name="message" id="messageBox" placeholder="Type your message here ..."></textarea>
+                    </span>
+                    <span class="fileupload">
+                        <p>File Upload</p>
+                        <span class="upload_area">
+                            <label for="myFile" class="custom-file-upload">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15M17 8L12 3M12 3L7 8M12 3V15" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                                <p style="color:#6C6C6C;">Drag & Drop file here or <span style="color:black; text-decoration:underline;">Choose File</span></p>
+                            </label>
+                            <input type="file" id="myFile" name="filename">
+                        </span>
+                    </span>
+                    <button>Send Message
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                            <path d="M7.33339 10.6667L16.5001 1.5M7.33339 10.6667L10.2501 16.5C10.2866 16.5798 10.3453 16.6474 10.4192 16.6948C10.493 16.7422 10.579 16.7674 10.6667 16.7674C10.7545 16.7674 10.8404 16.7422 10.9143 16.6948C10.9881 16.6474 11.0468 16.5798 11.0834 16.5L16.5001 1.5M7.33339 10.6667L1.50006 7.75C1.42027 7.71344 1.35266 7.65474 1.30526 7.58088C1.25786 7.50701 1.23267 7.4211 1.23267 7.33333C1.23267 7.24557 1.25786 7.15965 1.30526 7.08579C1.35266 7.01193 1.42027 6.95323 1.50006 6.91667L16.5001 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </form>
+
+            </div>
+            <div class="form_right">
+                <img src="img/2.png">
+            </div>
+        </div>
+	</main>
+	<footer>
+		<div class="footer_flex">
+			<img src="img/logo.png">
+            <ul class="ul2">
+				<li><a href="#">Home</a></li>
+				<li><a href="#">About Us</a></li>
+				<li><a href="#" id="active">Contact Us</a></li>
+			</ul>
+			<ul class="ul1">
+				<li><a href="#"><i class='bx bxl-twitter' style="color:white; background:#00acee; border-radius:6px; padding:5px;"></i></a></li>
+				<li><a href="#"><i class='bx bxl-linkedin-square' style="color:white; background:#0a66c2; border-radius:6px; padding:5px;"></i></a></li>
+				<li><a href="#"><i class='bx bxl-facebook-square' style="color:white; background:#3b5998; border-radius:6px; padding:5px;"></i></a></li>
+				<li><a href="#"><i class='bx bxl-instagram-alt' style="color:white; background:#ee2a7b; border-radius:6px; padding:5px;"></i></a></li>
+			</ul>
+		</div>
+		<p>Copyright © 2024 Poofo - All rights reserved.</p>
+	</footer>
+</body>
+<script>
+	function toggleMenu() {
+  		var menuItems = document.getElementById("ul");
+  		menuItems.classList.toggle("show");
+		
+		var menuItems = document.getElementById("opacity_modal");
+  		menuItems.classList.toggle("show");
+	}
+	
+</script>
+</html>
