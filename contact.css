@@ -299,6 +299,8 @@ form button{
 /* footer *//* footer *//* footer */
 
 footer {
+    position: absolute;
+    bottom: 0;
     background-color: #FFEEF0;
     width: 100%;
 }
