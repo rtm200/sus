@@ -17,7 +17,7 @@
 	<i class='bx bx-menu burger' onclick="toggleMenu()"></i>
 		<img src="img/logo.png">
 		<ul id="ul">
-			<img src="img/1.PNG" class="mobile_tree">
+			<img src="img/1.png" class="mobile_tree">
 			<li><i class='bx bx-x closeBurger' onclick="toggleMenu()"></i><a href="index.php">Home</a></li>
 			<li><a href="#">About</a></li>
 			<li><a href="contact.php" id="active">Contact us</a></li>
@@ -30,23 +30,23 @@
         <div class="form">
             <div class="form_left">
 
-                <form action="" method="POST">
+                <form action="" method="POST" id="contactForm">
                     <h2>Contact us</h2>
                     <span class="inputField">
                         <p>Fullname</p>
-                        <input type="text" name="fullname" placeholder="Your full name">
+                        <input type="text" name="fullname" placeholder="Your full name" id="fullName">
                     </span>
                     <span class="inputField">
                         <p>Email</p>
-                        <input type="email" name="email" placeholder="Youremail@email.com">
+                        <input type="email" name="email" placeholder="Youremail@email.com" id="emailField">
                     </span>
                     <span class="country_list">
                         <p>Country</p>
                         <ul>
-                            <li>Australia</li>
-                            <li>Canada</li>
-                            <li>USA</li>
-                            <li>Europe</li>
+                            <li data-value="Australia">Australia</li>
+                            <li data-value="Canada">Canada</li>
+                            <li data-value="USA">USA</li>
+                            <li data-value="Europe">Europe</li>
                         </ul>
                     </span>
                     <span>
@@ -65,7 +65,7 @@
                             <input type="file" id="myFile" name="filename">
                         </span>
                     </span>
-                    <button>Send Message
+                    <button type="submit" name="submit">Send Message
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
                             <path d="M7.33339 10.6667L16.5001 1.5M7.33339 10.6667L10.2501 16.5C10.2866 16.5798 10.3453 16.6474 10.4192 16.6948C10.493 16.7422 10.579 16.7674 10.6667 16.7674C10.7545 16.7674 10.8404 16.7422 10.9143 16.6948C10.9881 16.6474 11.0468 16.5798 11.0834 16.5L16.5001 1.5M7.33339 10.6667L1.50006 7.75C1.42027 7.71344 1.35266 7.65474 1.30526 7.58088C1.25786 7.50701 1.23267 7.4211 1.23267 7.33333C1.23267 7.24557 1.25786 7.15965 1.30526 7.08579C1.35266 7.01193 1.42027 6.95323 1.50006 6.91667L16.5001 1.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
@@ -104,6 +104,75 @@
 		var menuItems = document.getElementById("opacity_modal");
   		menuItems.classList.toggle("show");
 	}
+
+//check empty input
+
+
+var selectedCountryValue = null;
+document.querySelectorAll(".form_left form .country_list ul li").forEach(function(li) {
+    li.addEventListener("click", function() {
+        document.querySelectorAll(".form_left form .country_list ul li").forEach(function(item) {
+            item.classList.remove("selected");
+        });
+
+        this.classList.add("selected");
+
+        selectedCountryValue = this.getAttribute("data-value");
+
+        console.log(selectedCountryValue);
+    });
+});
+
+// Form submission event listener
+document.getElementById("contactForm").addEventListener("submit", function(event) {
+
+    // Check if any input is empty
+    var email = document.getElementById("emailField").value.trim();
+    var name = document.getElementById("fullName").value.trim();
+    var message = document.getElementById("messageBox").value.trim();
+
+    // Check if any input is empty
+    var isValid = true;
+    if (email === "") {
+        document.getElementById("emailField").style.borderColor = "#FF5656";
+        isValid = false;
+    } else {
+        document.getElementById("emailField").style.borderColor = ""; // Reset border color
+    }
+    if (name === "") {
+        document.getElementById("fullName").style.borderColor = "#FF5656";
+        isValid = false;
+    } else {
+        document.getElementById("fullName").style.borderColor = ""; // Reset border color
+    }
+    if (message === "") {
+        document.getElementById("messageBox").style.borderColor = "#FF5656";
+        isValid = false;
+    } else {
+        document.getElementById("messageBox").style.borderColor = ""; // Reset border color
+    }
+
+    // Check if a country is selected
+    if (selectedCountryValue === null) {
+        console.log("No country selected");
+        document.querySelectorAll(".form_left form .country_list ul li").forEach(function(item) {
+            item.style.borderColor = "#FF5656";
+        });
+        isValid = false;
+    }
+    else{
+        document.querySelectorAll(".form_left form .country_list ul li").forEach(function(item) {
+            item.style.borderColor = "";
+        });
+    }
+
+    // Submit the form if all inputs are filled
+    if (!isValid) {
+        event.preventDefault();
+    }
+});
+
+
 	
 </script>
 </html>
