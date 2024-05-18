@@ -286,6 +286,7 @@ main form button {
     background-color: #6C4C9E;
     color: white;
     font-size: 16px;
+    margin-top: 20px !important;
 }
 
 main form .signup {
@@ -594,19 +595,26 @@ footer p {
 }
 
 @media only screen and (max-width: 500px) {
+    header {
+        max-width: 90%;
+        
+    }
+    main {
+        max-width: 90%;
+    }
     header img {
         width: 136px;
     }
     header ul{
         gap: 28px;
     }
-header ul li a{
+    header ul li a{
         font-size: 14px;
     }
     /* main */
     main h1 {
         width: 100%;
-        font-size: 30px;
+        font-size: 20px;
         text-align: left;
     }
 
@@ -614,7 +622,9 @@ header ul li a{
         font-size: 32px;
         font-weight: 500;
     }
-
+    main form .inputField input {
+        height: 48px;
+    }
     .container_right {
         display: none;
     }
@@ -629,7 +639,7 @@ header ul li a{
         transform: translateY(0px);
 
     }
-
+    
     section h2 {
         font-size: 28px;
     }
