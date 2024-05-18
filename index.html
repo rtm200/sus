@@ -9,7 +9,7 @@
 	<link rel="stylesheet" href="style.css">
 </head>
 <body>
-	<img src="img/1.PNG" class="tree">
+	<img src="img/1.png" class="tree">
 	<header>
 	<!-- mobile menu opacity plane -->
 	<span id="opacity_modal" onclick="toggleMenu()"></span>
@@ -30,11 +30,11 @@
 		<h1>Welcome to your autism support network!</h1>
 		<div class="container">
 			<div class="container_left">
-				<form action="" method="POST">
+				<form action="" method="POST" id="loginForm">
 					<h4>Sign In</h4>
-					<div class="inputField">
+					<div class="inputField" id="email">
 						<h6>Email</h6>
-						<input type="text" name="email" placeholder="example@gmail.com" autocomplete="off">
+						<input type="text" name="email" placeholder="example@gmail.com" autocomplete="off" id="emailField">
 					</div>
 					<div class="inputField">
 						<h6>Password</h6>
@@ -165,6 +165,36 @@
 	});
 
 	// check empty input
-	
+	document.getElementById("loginForm").addEventListener("submit", function(event) {
+		// Prevent form submission
+		var isValid = true;
+
+		var email = document.getElementById("emailField").value.trim();
+		var password = document.getElementById("passwordField").value.trim();
+
+		// Check if any input is empty
+		var isEmpty = false;
+		if (email === "") {
+			document.getElementById("emailField").style.borderColor = "#FF5656";
+			var isValid = false;
+		} else {
+			document.getElementById("emailField").style.borderColor = ""; // Reset border color
+		}
+		if (password === "") {
+			document.getElementById("passwordField").style.borderColor = "#FF5656";
+			var isValid = false;
+		} else {
+			document.getElementById("passwordField").style.borderColor = ""; // Reset border color
+		}
+
+		// Submit the form if all inputs are filled
+		if (!isValid) {
+			event.preventDefault();
+		}
+	});
+
+
+
+
 </script>
 </html>
