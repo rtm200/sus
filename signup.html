@@ -15,7 +15,7 @@
 	<span id="opacity_modal" onclick="toggleMenu()"></span>
 	
 	<i class='bx bx-menu burger' onclick="toggleMenu()"></i>
-		<img src="img/logo.PNG">
+		<img src="img/logo.png">
 		<ul id="ul">
 			<img src="img/1.png" class="mobile_tree">
 			<li><i class='bx bx-x closeBurger' onclick="toggleMenu()"></i><a href="index.php">Home</a></li>
@@ -30,15 +30,15 @@
 		<h1>Welcome to your autism support network!</h1>
 		<div class="container">
 			<div class="container_left">
-				<form action="" method="POST">
+				<form action="" method="POST" id="signupForm">
 					<h4>Sign Up</h4>
 					<div class="inputField">
 						<h6>Full Name</h6>
-						<input id="text" type="text" name="full_name" autocomplete="off" placeholder="Your Name" required>
+						<input type="text" name="full_name" autocomplete="off" placeholder="Your Name" id="nameField">
 					</div>
 					<div class="inputField">
 						<h6>Email</h6>
-						<input type="text" name="email" placeholder="example@gmail.com" autocomplete="off">
+						<input type="text" name="email" placeholder="example@gmail.com" autocomplete="off" id="emailField">
 					</div>
 					<div class="inputField">
 					<h6>User Type</h6>
@@ -64,7 +64,7 @@
 							<input type="password" name="password" placeholder="Password" autocomplete="off" id="passwordField">
 						</span>
 					</div>
-					<button name="submit" type="submit">Sign Up</button>
+					<button name="submit" type="submit" id="submitButton">Sign Up</button>
 					<div class="signup">
 						<h5>Already a member?</h5>
 						<a href="index.php">Login</a>
@@ -181,10 +181,9 @@
 		hidePwdIcon.style.display = "none";
 	});
 
-	// check empty input
 	//arrow dropdown toggle
 	arrowUp.style.display = 'none';
-    	arrowDown.style.display = 'block';
+    arrowDown.style.display = 'block';
 	document.getElementById('user_type').addEventListener('click', function() {
         var arrowUp = document.getElementById('arrowUp');
         var arrowDown = document.getElementById('arrowDown');
@@ -198,5 +197,45 @@
             arrowDown.style.display = 'block';
         }
     });
+	
+
+	// check empty input
+	document.getElementById("signupForm").addEventListener("submit", function(event) {
+		// Prevent form submission
+		var isValid = true;
+
+		// Get form inputs
+		var fullName = document.getElementById("nameField").value.trim();
+		var email = document.getElementById("emailField").value.trim();
+		var userType = document.getElementById("user_type").value;
+		var password = document.getElementById("passwordField").value.trim();
+
+		// Check if any input is empty
+		var isEmpty = false;
+		if (fullName === "") {
+			document.getElementById("nameField").style.borderColor = "#FF5656";
+			var isValid = false;
+		} else {
+			document.getElementById("nameField").style.borderColor = ""; // Reset border color
+		}
+		if (email === "") {
+			document.getElementById("emailField").style.borderColor = "#FF5656";
+			var isValid = false;
+		} else {
+			document.getElementById("emailField").style.borderColor = ""; // Reset border color
+		}
+		if (password === "") {
+			document.getElementById("passwordField").style.borderColor = "#FF5656";
+			var isValid = false;
+		} else {
+			document.getElementById("passwordField").style.borderColor = ""; // Reset border color
+		}
+
+		// Submit the form if all inputs are filled
+		if (!isValid) {
+			event.preventDefault();
+		}
+	});
+
 </script>
 </html>
