@@ -42,7 +42,8 @@
 					</div>
 					<div class="inputField">
 					<h6>User Type</h6>
-					<i class='bx bx-chevron-down drpArrow'></i>
+					<i class='bx bx-chevron-down drpArrow' id="arrowDown"></i>
+					<i class='bx bx-chevron-up drpArrow' id="arrowUp"></i>
 					<select id="user_type" name="user_type" autocomplete="off" required>
 						<option value="parents">Parents</option>
 						<option value="board_certified_behaviour_analyst">Board Certified Behaviour Analyst</option>
@@ -181,6 +182,21 @@
 	});
 
 	// check empty input
-	
+	//arrow dropdown toggle
+	arrowUp.style.display = 'none';
+    	arrowDown.style.display = 'block';
+	document.getElementById('user_type').addEventListener('click', function() {
+        var arrowUp = document.getElementById('arrowUp');
+        var arrowDown = document.getElementById('arrowDown');
+
+		
+        if (arrowUp.style.display === 'none') {
+            arrowUp.style.display = 'block';
+            arrowDown.style.display = 'none';
+        } else {
+            arrowUp.style.display = 'none';
+            arrowDown.style.display = 'block';
+        }
+    });
 </script>
 </html>
