@@ -159,7 +159,7 @@ main .container_left form {
     width: 80%;
     border: 3px solid black;
     border-radius: 30px;
-    background-color: rgb(251, 212, 218);
+    background-color: #FFEEF0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -198,6 +198,7 @@ select {
       outline: none;
     }
 }
+
 .drpArrow{
     right: 5%;
     top: 55%;
@@ -230,7 +231,14 @@ main form .inputField input {
     padding: 10px;
     font-size: 16px;
     outline: none;
-    border: none;
+    border: 2px solid transparent;
+    transition: 0.5s;
+}
+main form .inputField input:focus {
+    border: 2px solid #6C4C9E;
+}
+main form .inputField input:hover {
+    border: 2px solid #6C4C9E;
 }
 
 main form .password_input {
@@ -286,7 +294,6 @@ main form button {
     background-color: #6C4C9E;
     color: white;
     font-size: 16px;
-    margin-top: 20px !important;
 }
 
 main form .signup {
